@@ -16,6 +16,7 @@
 
 		imports = [
 			./nix/dev
+			./nix/pkg/anchor.nix
 			./nix/pkg/limbo.nix
 			./nix/pkg/solana.nix
 		];
