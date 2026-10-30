@@ -11,7 +11,7 @@
 		in pkgs.stdenv.mkDerivation {
 			inherit version;
 
-			pname = "solana_cli";
+			pname = "solana";
 
 			src = pkgs.fetchurl {
 				url = "https://github.com/anza-xyz/agave/releases/download/v${version}/solana-release-${configuration.arch}.tar.bz2";
@@ -36,6 +36,8 @@
 				cp -r . $out/
 				rm -rf $out/bin/perf-libs
 			'';
+
+			meta.mainProgram = "solana";
 		});
 	};
 }
