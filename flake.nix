@@ -16,6 +16,7 @@
 
 		imports = [
 			./nix/dev
+			./nix/pkg/limbo.nix
 		];
 	};
 }
