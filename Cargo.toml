@@ -3,3 +3,6 @@ resolver = "3"
 members = [
 	"crate/limbo"
 ]
+
+[profile.release]
+overflow-checks = true
