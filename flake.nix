@@ -17,7 +17,7 @@
 		imports = [
 			./nix/dev
 			./nix/pkg/limbo.nix
-			./nix/pkg/solana_cli.nix
+			./nix/pkg/solana.nix
 		];
 	};
 }
