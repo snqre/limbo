@@ -46,6 +46,8 @@
 				${pkgs.git-lfs}/bin/git-lfs install --local --skip-repo --quiet > /dev/null 2>&1
 
 				${config.pre-commit.installationScript} > /dev/null 2>&1
+
+				dev system-hook welcome
 			'';
 		};
 
