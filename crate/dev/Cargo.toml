@@ -9,6 +9,8 @@ clap = "*"
 eyre = "*"
 solana-sdk = "*"
 serde_json = "*"
+tracing = "*"
+tracing-subscriber = "*"
 
 [features]
 default = [
