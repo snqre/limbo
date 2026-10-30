@@ -31,6 +31,8 @@
 				pkgs.cocogitto
 				pkgs.pre-commit
 				pkgs.pkg-config
+
+				config.packages.solana
 			];
 
 			buildInputs = [
