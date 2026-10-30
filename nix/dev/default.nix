@@ -32,6 +32,7 @@
 				pkgs.pre-commit
 				pkgs.pkg-config
 
+				config.packages.dev
 				config.packages.anchor
 				config.packages.solana
 			];
