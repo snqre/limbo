@@ -3,10 +3,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-limbo = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
-
-[registry]
-url = "https://api.apr.dev"
+limbo = "2Jq4CX5Eez8cPJfLeKDwFdpvuuyjqZhzo1p1TL3tUbbR"
 
 [provider]
 cluster = "localnet"
