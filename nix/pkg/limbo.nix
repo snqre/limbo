@@ -5,11 +5,11 @@
 			pname = "limbo";
 			version = "0.1.0";
 			src = self;
-			rust_platform = (pkgs.makeRustPlatform {
-				rustc = config.rust-project.toolchain;
-				cargo = config.rust-project.toolchain;
-			});
 		in (pkgs.lib.mkForce (pkgs.stdenv.mkDerivation {
+			inherit pname;
+			inherit version;
+			inherit src;
+
 			__noChroot = true;
 
 			SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -18,7 +18,7 @@
 				pkgs.nushell
 
 				config.rust-project.toolchain
-				config.anchor
+				config.packages.anchor
 			];
 
 			buildPhase = '' nu -c '
@@ -27,7 +27,7 @@
 				mkdir $env.HOME
 				mkdir $env.out
 
-
+				anchor build
 			' '';
 		})));
 	};
