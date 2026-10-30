@@ -6,6 +6,9 @@ description = ""
 
 [dependencies]
 clap = "*"
+eyre = "*"
+solana-sdk = "*"
+serde_json = "*"
 
 [features]
 default = [
