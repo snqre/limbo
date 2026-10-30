@@ -1,6 +1,6 @@
 { ... }: {
 	perSystem = { pkgs, system, ... }: {
-		packages.solana_cli =
+		packages.solana =
 		(let
 			version = "1.18.18";
 
