@@ -9,7 +9,12 @@
 		devShells.default = pkgs.mkShell {
 			RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
 			RUST_BACKTRACE = "1";
-			RUSTFLAGS = "-A warnings";
+			RUSTFLAGS = "";
+
+			LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+				pkgs.openssl
+				pkgs.glib
+			];
 
 			inputsFrom = [
 				config.pre-commit.devShell
@@ -22,12 +27,9 @@
 				pkgs.nixpkgs-fmt
 				pkgs.git
 				pkgs.git-lfs
+				pkgs.secretspec
 				pkgs.cocogitto
 				pkgs.pre-commit
-				pkgs.clippy
-				pkgs.cargo
-				pkgs.rustc
-				pkgs.rust-analyzer
 				pkgs.pkg-config
 			];
 
@@ -37,8 +39,6 @@
 			];
 
 			shellHook = ''
-				export PATH="$HOME/.cargo/bin:$PATH"
-
 				${pkgs.git-lfs}/bin/git-lfs install --local --skip-repo --quiet > /dev/null 2>&1
 
 				${config.pre-commit.installationScript} > /dev/null 2>&1
