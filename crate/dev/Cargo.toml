@@ -1,0 +1,13 @@
+[package]
+name = "dev"
+version = "0.1.0"
+edition = "2024"
+description = ""
+
+[dependencies]
+clap = "*"
+
+[features]
+default = [
+	"clap/derive"
+]
