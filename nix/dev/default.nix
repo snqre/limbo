@@ -6,7 +6,7 @@
 	];
 
 	perSystem = { config, pkgs, inputs', ... }: {
-		devShells.default = pkgs.mkShell {
+		devShells.default = (pkgs.mkShell {
 			RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
 			RUST_BACKTRACE = "1";
 			RUSTFLAGS = "";
@@ -38,8 +38,7 @@
 			buildInputs = [
 				pkgs.openssl
 				pkgs.glib
-
-				pkgs.anchor."1.2.1".anchoir-cli
+				pkgs.anchor."1.2.1".anchor-cli
 				pkgs.anchor."1.2.1".solana-rust
 			];
 
@@ -52,7 +51,7 @@
 
 				dev system-hook welcome
 			'';
-		};
+		});
 
 		rust-project.toolchain = inputs'.fenix.packages.stable.toolchain;
 
