@@ -28,6 +28,8 @@
 				pkgs.zlib-ng
 				pkgs.openssl
 				pkgs.udev
+
+				config.packages.solana_platform_tool
 			];
 
 			installPhase = ''
@@ -39,6 +41,12 @@
 				mkdir -p $out/bin/sdk/sbf/dependencies
 
 				ln -s ${config.packages.solana_platform_tool} $out/bin/sdk/sbf/dependencies/platform-tools
+
+				if [ -f $out/bin/cargo-build-sbf ]; then
+					wrapProgram $out/bin/cargo-build-sbf \
+						--set SOLANA_SDK_PATH "$out/bin/sdk/sbf" \
+						--prefix PATH : "$out/bin:${config.packages.solana_platform_tool}/bin:${config.packages.solana_platform_tool}/llvm/bin"
+				fi
 			'';
 
 			meta.mainProgram = "solana";
