@@ -5,11 +5,11 @@ declare_id!("2Jq4CX5Eez8cPJfLeKDwFdpvuuyjqZhzo1p1TL3tUbbR");
 type Result<T = ()> = anchor_lang::Result<T>;
 
 #[derive(Accounts)]
-struct New<'a> {
-	pub system_program: Program<'a, System>,
+struct New<'info> {
+	pub system_program: Program<'info, System>,
 
 	#[account(mut)]
-	pub creator: Signer<'a>
+	pub creator: Signer<'info>
 }
 
 #[program]
