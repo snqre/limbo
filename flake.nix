@@ -7,6 +7,7 @@
 	inputs.rust_flake.inputs.nixpkgs.follows = "nixpkgs";
 	inputs.fenix.url = "github:nix-community/fenix";
 	inputs.fenix.inputs.nixpkgs.follows = "nixpkgs";
+	inputs.solana.url = "github:NousResearch/solana-flake";
 
 	outputs = inputs @ { nixpkgs, flake-parts, ... }:
 	flake-parts.lib.mkFlake {

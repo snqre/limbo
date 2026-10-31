@@ -122,13 +122,30 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1751479989,
+        "narHash": "sha256-M5KgdpVBVcW4HRVq9/OSRbrxlwsQ1ogEKqnvzsClDqU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "34627c90f062da515ea358360f448da57769236e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "release-25.05",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "fenix": "fenix",
         "flake-parts": "flake-parts",
         "git_hook": "git_hook",
         "nixpkgs": "nixpkgs",
-        "rust_flake": "rust_flake"
+        "rust_flake": "rust_flake",
+        "solana": "solana"
       }
     },
     "rust-analyzer-src": {
@@ -188,6 +205,24 @@
       "original": {
         "owner": "juspay",
         "repo": "rust-flake",
+        "type": "github"
+      }
+    },
+    "solana": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1773690045,
+        "narHash": "sha256-cqOStrljmBuCWrVXjACFY0ZIVuqfy7PTVcgnfh+vZEA=",
+        "owner": "NousResearch",
+        "repo": "solana-flake",
+        "rev": "c1e48211971952ef6b3975c6d8fdc1f79ed7418a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NousResearch",
+        "repo": "solana-flake",
         "type": "github"
       }
     }
