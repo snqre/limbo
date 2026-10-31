@@ -11,6 +11,7 @@ crate-type = ["cdylib", "lib"]
 
 [dependencies]
 anchor-lang = "1.2.1"
+anchor-spl = "*"
 
 [features]
 default = []
