@@ -7,10 +7,11 @@
 	inputs.rust_flake.inputs.nixpkgs.follows = "nixpkgs";
 	inputs.fenix.url = "github:nix-community/fenix";
 	inputs.fenix.inputs.nixpkgs.follows = "nixpkgs";
-	inputs.solana.url = "github:NousResearch/solana-flake";
+	inputs.anchor.url = "github:vaporif/anchor-overlay";
+	inputs.anchor.inputs.nixpkgs.follows = "nixpkgs";
 
 	outputs = inputs @ { nixpkgs, flake-parts, ... }:
-	flake-parts.lib.mkFlake {
+	(flake-parts.lib.mkFlake {
 		inherit inputs;
 	} {
 		systems = nixpkgs.lib.systems.flakeExposed;
@@ -22,5 +23,11 @@
 			./nix/pkg/solana.nix
 			./nix/pkg/solana_platform_tool.nix
 		];
-	};
+
+		perSystem = ({ ... }: {
+			nixpkgs.overlays = [
+				inputs.anchor.overlays.default
+			];
+		});
+	});
 }

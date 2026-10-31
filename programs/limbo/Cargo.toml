@@ -1,12 +1,13 @@
 [package]
 name = "limbo"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 description = "Solana USDC Escrow Vault Prototype"
+rust-version = "1.95"
 
 [lib]
 name = "limbo"
 crate-type = ["cdylib", "lib"]
 
 [dependencies]
-anchor-lang = ">=0.1.0,<1.0.0"
+anchor-lang = "1.2.1"

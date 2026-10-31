@@ -39,11 +39,13 @@
 				pkgs.openssl
 				pkgs.glib
 
-				inputs'.solana.packages.solana
-				inputs'.solana.packages.anchor
+				pkgs.anchor."1.2.1".anchoir-cli
+				pkgs.anchor."1.2.1".solana-rust
 			];
 
 			shellHook = ''
+				export PATH="${inputs'.fenix.packages.stable.toolchain}/bin:$PATH"
+
 				${pkgs.git-lfs}/bin/git-lfs install --local --skip-repo --quiet > /dev/null 2>&1
 
 				${config.pre-commit.installationScript} > /dev/null 2>&1
