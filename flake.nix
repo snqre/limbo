@@ -20,6 +20,7 @@
 			./nix/check/launch_limbo.nix
 			./nix/dev
 			./nix/pkg/limbo.nix
+			./nix/pkg/spl_token_cli.nix
 		];
 
 		perSystem = ({ ... }: {
