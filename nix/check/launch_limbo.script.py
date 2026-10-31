@@ -42,7 +42,7 @@ buyer_associated_token_account: str = buyer_associated_token_account.group(1)
 main.succeed(f"spl-token mint {token_mint} 1000 {buyer_associated_token_account} --url http://127.0.0.1:8899")
 
 def discriminator(name: str) -> list[int]:
-	return list(hashlib.sha256(f"global:{name}".encode("utf-8")).digest()[:8])
+	return list(hashlib.sha256(f"global:{name}".encode()).digest()[:8])
 
 new_task = discriminator("new")
 
