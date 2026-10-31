@@ -17,6 +17,7 @@
 		systems = nixpkgs.lib.systems.flakeExposed;
 
 		imports = [
+			./nix/check/launch_limbo.nix
 			./nix/dev
 			./nix/pkg/limbo.nix
 		];
