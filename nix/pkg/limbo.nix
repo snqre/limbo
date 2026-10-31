@@ -5,7 +5,6 @@
 			pname = "limbo";
 			version = "0.1.0";
 			src = self;
-			secret_key = (builtins.getEnv "SOLANA_SECRET_KEY");
 		in (pkgs.lib.mkForce (pkgs.stdenv.mkDerivation {
 			inherit pname;
 			inherit version;
@@ -15,23 +14,42 @@
 
 			SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
 
+			RUST_BACKTRACE = "full";
+
 			nativeBuildInputs = [
 				pkgs.nushell
+				pkgs.autoPatchelfHook
+				pkgs.makeWrapper
 
 				config.rust-project.toolchain
 				config.packages.anchor
 				config.packages.solana
 			];
 
+			buildInputs = [
+				pkgs.zlib
+				pkgs.zlib-ng
+				pkgs.stdenv.cc.cc
+			];
+
 			buildPhase = '' nu -c '
 				$env.HOME = ($env.TMPDIR | path join "home")
 
-				mkdir $env.HOME
-				mkdir target/deploy
+				let cache_dir = ($env.HOME | path join ".cache" "solana" "v1.41" "platform-tools")
 
-				"${secret_key}" | save target/deploy/limbo-keypair.json
+				^mkdir -p $cache_dir
 
-				anchor build --arch sbfv1
+				^cp -r ("${config.packages.solana_platform_tool}" + "/.") $cache_dir
+				^chmod -R +w $cache_dir
+
+				$env.SOLANA_SDK_PATH = ("${config.packages.solana}/bin/sdk/sbf")
+				$env.SBF_SDK_PATH = ("${config.packages.solana}/bin/sdk/sbf")
+
+				^mkdir -p target/deploy
+
+				^solana-keygen new --no-passphrase --outfile target/deploy/limbo-keypair.json --force
+
+				^anchor build --arch sbfv2 --ignore-keys
 			' '';
 
 			installPhase = '' nu -c '
