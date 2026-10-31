@@ -38,8 +38,11 @@
 			buildInputs = [
 				pkgs.openssl
 				pkgs.glib
+
 				pkgs.anchor."1.2.1".anchor-cli
 				pkgs.anchor."1.2.1".solana-rust
+
+				pkgs.solana-cli
 			];
 
 			shellHook = ''
