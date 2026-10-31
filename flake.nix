@@ -18,10 +18,7 @@
 
 		imports = [
 			./nix/dev
-			./nix/pkg/anchor.nix
 			./nix/pkg/limbo.nix
-			./nix/pkg/solana.nix
-			./nix/pkg/solana_platform_tool.nix
 		];
 
 		perSystem = ({ ... }: {
