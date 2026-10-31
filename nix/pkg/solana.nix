@@ -13,7 +13,7 @@
 			pname = "solana";
 
 			src = (pkgs.fetchurl {
-				url = "https://github.com/anza-xyz/agave/releases/download/v${version}/solana-release-${configuration.arch}.tar.bz2";
+				url = "https://github.com/anza-xyz/agave/releases/download/v${version}/solana-release-${configuration.name}.tar.bz2";
 				sha256 = "sha256-7EGCsk6cqxThXu2SqGRIwbjvRtatbZMnXK08Nta9yMw=";
 			});
 
