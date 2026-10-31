@@ -33,13 +33,14 @@
 				pkgs.pkg-config
 
 				config.packages.dev
-				config.packages.anchor
-				config.packages.solana
 			];
 
 			buildInputs = [
 				pkgs.openssl
 				pkgs.glib
+
+				inputs'.solana.packages.solana
+				inputs'.solana.packages.anchor
 			];
 
 			shellHook = ''
