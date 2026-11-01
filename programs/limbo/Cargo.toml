@@ -16,12 +16,18 @@ anchor-spl = "1.2.1"
 [dev-dependencies]
 eyre = ">=0.1.0,<1.0.0"
 litesvm = "=0.16.0"
+litesvm-token = ">=0.1.0,<1.0.0"
 solana-sdk = ">=4.0.0,<5.0.0"
 solana-address = ">=2.0.0,<3.0.0"
+spl-token = ">=8.0.0,<9.0.0"
+spl-associated-token-account = ">=8.0.0,<9.0.0"
+sha2 = "*"
 
 [features]
 default = []
 idl-build = [
 	"anchor-lang/idl-build",
-	"anchor-spl/idl-build"
+	"anchor-spl/idl-build",
+	"spl-token/no-entrypoint",
+	"spl-associated-token-account/no-entrypoint"
 ]
