@@ -2935,8 +2935,12 @@ dependencies = [
  "anchor-spl",
  "eyre",
  "litesvm",
+ "litesvm-token",
+ "sha2 0.11.1",
  "solana-address 2.6.1",
  "solana-sdk",
+ "spl-associated-token-account",
+ "spl-token",
 ]
 
 [[package]]
@@ -3031,6 +3035,28 @@ dependencies = [
  "solana-transaction-error",
  "thiserror 2.0.21",
  "wincode",
+]
+
+[[package]]
+name = "litesvm-token"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3cc0d806375b3854f5fa0e27976ce536e9c112486bb3f46a4cda29d55f6762c8"
+dependencies = [
+ "litesvm",
+ "smallvec",
+ "solana-account 4.3.2",
+ "solana-address 2.6.1",
+ "solana-keypair",
+ "solana-program-option 3.1.0",
+ "solana-program-pack 3.1.0",
+ "solana-rent 4.3.0",
+ "solana-signer",
+ "solana-system-interface 3.2.0",
+ "solana-transaction",
+ "solana-transaction-error",
+ "spl-associated-token-account-interface",
+ "spl-token-interface 3.0.0",
 ]
 
 [[package]]
