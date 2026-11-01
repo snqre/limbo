@@ -4,7 +4,6 @@
 #![deny(clippy::panic)]
 #![deny(clippy::cast_possible_truncation)]
 #![deny(clippy::cast_possible_wrap)]
-#![allow(unexpected_cfgs)]
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Mint, Token, TokenAccount, Transfer};
@@ -35,7 +34,10 @@ enum Error {
 	IllegalAmount,
 
 	#[msg("deadline has not been reached yet")]
-	Pending
+	Pending,
+
+	#[msg("unauthorized")]
+	Unauthorized
 }
 
 
@@ -76,7 +78,7 @@ struct Escrow {
 
 
 #[derive(Accounts)]
-#[instruction(seed: u64, amount: u64, deadline: i64, attestator: Option<Pubkey>, rbiter: Option<Pubkey>)]
+#[instruction(seed: u64, amount: u64, deadline: i64, attestator: Option<Pubkey>, arbiter: Option<Pubkey>)]
 struct New<'info> {
 	pub system_program: Program<'info, System>,
 	pub token_program: Program<'info, Token>,
@@ -111,6 +113,42 @@ struct New<'info> {
 
 #[derive(Accounts)]
 #[instruction(seed: u64)]
+struct Attest<'info> {
+	pub token_program: Program<'info, Token>,
+	pub usdc: Account<'info, Mint>,
+
+	/// CHECK: used for destination transfer and seed derivation
+	#[account(mut)]
+	pub seller: UncheckedAccount<'info>,
+
+	#[account(mut)]
+	#[account(associated_token::mint = usdc)]
+	#[account(associated_token::authority = seller)]
+	pub seller_token_account: Account<'info, TokenAccount>,
+
+	#[account(mut)]
+	pub buyer: Signer<'info>,
+
+	#[account(mut)]
+	pub attestator: Signer<'info>,
+
+	#[account(mut)]
+	#[account(associated_token::mint = usdc)]
+	#[account(associated_token::authority = buyer)]
+	pub buyer_token_account: Account<'info, TokenAccount>,
+
+	#[account(associated_token::mint = usdc)]
+	#[account(associated_token::authority = escrow)]
+	pub vault_token_account: Account<'info, TokenAccount>,
+
+	#[account(mut)]
+	#[account(seeds = [b"escrow", buyer.key().as_ref(), seller.key().as_ref(), seed.to_le_bytes().as_ref()])]
+	#[account(bump)]
+	pub escrow: Account<'info, Escrow>
+}
+
+#[derive(Accounts)]
+#[instruction(seed: u64)]
 struct Refund<'info> {
 	pub system_program: Program<'info, System>,
 	pub token_program: Program<'info, Token>,
@@ -129,13 +167,11 @@ struct Refund<'info> {
 	#[account(associated_token::authority = buyer)]
 	pub buyer_token_account: Account<'info, TokenAccount>,
 
-	#[account(payer = buyer)]
 	#[account(associated_token::mint = usdc)]
 	#[account(associated_token::authority = escrow)]
 	pub vault_token_account: Account<'info, TokenAccount>,
 
-	#[account(payer = buyer)]
-	#[account(space = 8 + Escrow::INIT_SPACE)]
+	#[account(mut)]
 	#[account(seeds = [b"escrow", buyer.key().as_ref(), seller.key().as_ref(), seed.to_le_bytes().as_ref()])]
 	#[account(bump)]
 	pub escrow: Account<'info, Escrow>
@@ -181,6 +217,50 @@ mod contract {
 		let token_deposit_cpi_context: CpiContext<_> = CpiContext::new(token_program_address, token_transfer_task);
 
 		anchor_spl::token::transfer(token_deposit_cpi_context, amount)?;
+
+		Ok(())
+	}
+
+	pub fn attest(context: Context<Attest>, seed: u64) -> Result {
+		// a signature or cryptographic proof can be checked onchain instead of a specific attestator being required (for this implementation requiring a single attestator should be enough)
+
+		let escrow: &mut Account<_> = &mut context.accounts.escrow;
+
+		require!(escrow.lifecycle == Lifecycle::Funded, Error::AlreadyComplete);
+
+		if let Some(required_attestator_addr) = escrow.attestator {
+			let attestator_addr = context.accounts.attestator.key();
+
+			require!(attestator_addr == required_attestator_addr, Error::Unauthorized);
+		}
+
+		escrow.lifecycle = Lifecycle::Delivered;
+
+		let buyer_addr = escrow.buyer;
+		let buyer_addr_bytes: &[_] = buyer_addr.as_ref();
+		let seller_addr = context.accounts.seller.key();
+		let seller_addr_bytes: &[_] = seller_addr.as_ref();
+		let bump: u8 = escrow.bump;
+		let seed_bytes: [_; _] = seed.to_le_bytes();
+		let seeds = &[b"escrow", buyer_addr_bytes, seller_addr_bytes, &seed_bytes, &[bump]];
+		let signer_seeds = &[&seeds[..]];
+
+		let escrow_account_info: AccountInfo = escrow.to_account_info();
+		let seller_token_account_info: AccountInfo = context.accounts.seller_token_account.to_account_info();
+		let vault_token_account_info: AccountInfo = context.accounts.vault_token_account.to_account_info();
+
+		let token_transfer_task: Transfer = Transfer {
+			from: vault_token_account_info,
+			to: seller_token_account_info,
+			authority: escrow_account_info
+		};
+
+		let token_program_addr = context.accounts.token_program.key();
+		let token_withdrawal_cpi_context: CpiContext<_> = CpiContext::new_with_signer(token_program_addr, token_transfer_task, signer_seeds);
+
+		anchor_spl::token::transfer(token_withdrawal_cpi_context, escrow.amount)?;
+
+		escrow.lifecycle = Lifecycle::Released;
 
 		Ok(())
 	}
