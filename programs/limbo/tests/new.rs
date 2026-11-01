@@ -8,6 +8,19 @@ use solana_address::*;
 
 #[test]
 fn new() {
+	let exit: std::process::ExitStatus = std::process::Command::new("anchor").args([
+		"build",
+		"--",
+		"--package", "limbo"
+	])
+	.current_dir("../../")
+	.stdout(std::process::Stdio::inherit())
+	.stderr(std::process::Stdio::inherit())
+	.status()
+	.expect("anchor build execution");
+
+	assert!(exit.success(), "anchor build failed");
+
 	let mut svm: LiteSVM = LiteSVM::default();
 
 	let program_pk: Pubkey = Pubkey::new_unique();
