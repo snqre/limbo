@@ -1,15 +1,15 @@
 [package]
-name = "client"
+name = "limbo_client"
 version = "0.1.0"
 edition = "2024"
 description = ""
 
 [dependencies]
-clap = "*"
+clap = ">=4.0.0,<5.0.0"
 eyre = "*"
+serde_json = "*"
 solana-sdk = "*"
 solana-client = "*"
-serde_json = "*"
 solders = "*"
 tracing = "*"
 tracing-subscriber = "*"
