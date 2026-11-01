@@ -74,6 +74,8 @@ struct New<'info> {
 	pub associated_token_program: Program<'info, AssociatedToken>,
 	pub rent: Sysvar<'info, Rent>,
 	pub usdc: Account<'info, Mint>,
+
+	/// CHECK: We are only transferring tokens/sol to this account and validating it via business logic
 	pub seller: UncheckedAccount<'info>,
 
 	#[account(mut)]
@@ -106,6 +108,8 @@ struct Refund<'info> {
 	pub associated_token_program: Program<'info, AssociatedToken>,
 	pub rent: Sysvar<'info, Rent>,
 	pub usdc: Account<'info, Mint>,
+
+	/// CHECK: Only used for seeds derivation
 	pub seller: UncheckedAccount<'info>,
 
 	#[account(mut)]
