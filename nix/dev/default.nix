@@ -43,6 +43,8 @@
 				pkgs.anchor."1.2.1".solana-rust
 
 				pkgs.solana-cli
+
+				config.packages.limbo_client
 			];
 
 			shellHook = ''
