@@ -10,6 +10,14 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{Mint, Token, TokenAccount, Transfer};
 use anchor_spl::associated_token::AssociatedToken;
 
+// - needs a verification mechanism that will validate signed verdict token
+// - needs to check an ed25519 signature instruction passed in the transaction or verify state proof against a program stored pk representing the signing authority
+// - needs the remaining lifecycle instruction suite (attest, release)
+// - - attest: an instruction callable only by the designated attestator (either an agent or role) that transitions the state from `Funded` to `Delivered`
+// - - release: instruction to move funds from the vault token account to the seller's token account once condition/attestation or verification verdict is met
+// - arbiter & dispute pipeline
+// -
+
 declare_id!("2Jq4CX5Eez8cPJfLeKDwFdpvuuyjqZhzo1p1TL3tUbbR");
 
 type Result<T = ()> = anchor_lang::Result<T>;
@@ -120,13 +128,11 @@ struct Refund<'info> {
 	#[account(associated_token::authority = buyer)]
 	pub buyer_token_account: Account<'info, TokenAccount>,
 
-	#[account(init)]
 	#[account(payer = buyer)]
 	#[account(associated_token::mint = usdc)]
 	#[account(associated_token::authority = escrow)]
 	pub vault_token_account: Account<'info, TokenAccount>,
 
-	#[account(init)]
 	#[account(payer = buyer)]
 	#[account(space = 8 + Escrow::INIT_SPACE)]
 	#[account(seeds = [b"escrow", buyer.key().as_ref(), seller.key().as_ref(), seed.to_le_bytes().as_ref()])]
