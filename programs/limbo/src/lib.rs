@@ -66,6 +66,7 @@ enum ArbitrationPolicy {
 struct Escrow {
 	pub buyer: Pubkey,
 	pub seller: Pubkey,
+	pub attestator: Option<Pubkey>,
 	pub amount: u64,
 	pub deadline: i64,
 	pub arbitration_policy: ArbitrationPolicy,
@@ -75,7 +76,7 @@ struct Escrow {
 
 
 #[derive(Accounts)]
-#[instruction(seed: u64, amount: u64, deadline: i64, arbiter: Option<Pubkey>)]
+#[instruction(seed: u64, amount: u64, deadline: i64, attestator: Option<Pubkey>, rbiter: Option<Pubkey>)]
 struct New<'info> {
 	pub system_program: Program<'info, System>,
 	pub token_program: Program<'info, Token>,
@@ -144,7 +145,7 @@ struct Refund<'info> {
 mod contract {
 	use super::*;
 
-	pub fn new(context: Context<New>, seed: u64, amount: u64, deadline: i64, arbiter: Option<Pubkey>) -> Result {
+	pub fn new(context: Context<New>, seed: u64, amount: u64, deadline: i64, attestator: Option<Pubkey>, arbiter: Option<Pubkey>) -> Result {
 		require!(amount > 0, Error::IllegalAmount);
 
 		let now: Clock = Clock::get()?;
@@ -154,6 +155,7 @@ mod contract {
 		let escrow: &mut Account<_> = &mut context.accounts.escrow;
 		escrow.buyer = context.accounts.buyer.key();
 		escrow.seller = context.accounts.seller.key();
+		escrow.attestator = attestator;
 		escrow.amount = amount;
 		escrow.deadline = deadline;
 		escrow.bump = context.bumps.escrow;
