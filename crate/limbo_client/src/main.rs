@@ -75,16 +75,16 @@ fn main() -> Result {
 			payload.push(0);
 
 			let accounts = vec![
-			    solders::instruction::AccountMeta::new_readonly(solana_sdk::pubkey!("11111111111111111111111111111111"), false),
-			    solders::instruction::AccountMeta::new_readonly(spl_token::id(), false),
-			    solders::instruction::AccountMeta::new_readonly(spl_associated_token_account::id(), false),
-			    solders::instruction::AccountMeta::new_readonly(solana_sdk::sysvar::rent::id(), false),
-			    solders::instruction::AccountMeta::new_readonly(token_mint, false),
-			    solders::instruction::AccountMeta::new_readonly(seller_public_key, false),
-			    solders::instruction::AccountMeta::new(buyer_public_key, true),
-			    solders::instruction::AccountMeta::new(buyer_ata, false),
-			    solders::instruction::AccountMeta::new(vault_ata, false),
-			    solders::instruction::AccountMeta::new(escrow_pda, false),
+				solana_sdk::instruction::AccountMeta::new_readonly(solana_sdk::pubkey!("11111111111111111111111111111111"), false),
+				solana_sdk::instruction::AccountMeta::new_readonly(solana_sdk::pubkey::Pubkey::new_from_array(spl_token::id().to_bytes()), false),
+				solana_sdk::instruction::AccountMeta::new_readonly(spl_associated_token_account::id(), false),
+				solana_sdk::instruction::AccountMeta::new_readonly(solana_sdk::sysvar::rent::id(), false),
+				solana_sdk::instruction::AccountMeta::new_readonly(token_mint, false),
+				solana_sdk::instruction::AccountMeta::new_readonly(seller_public_key, false),
+				solana_sdk::instruction::AccountMeta::new(buyer_public_key, true),
+				solana_sdk::instruction::AccountMeta::new(buyer_ata, false),
+				solana_sdk::instruction::AccountMeta::new(vault_ata, false),
+				solana_sdk::instruction::AccountMeta::new(escrow_pda, false)
 			];
 
 			let task = solana_sdk::instruction::Instruction::new_with_bytes(program_public_key, &payload, accounts);
