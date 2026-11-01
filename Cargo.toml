@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+	"crate/limbo_client",
 	"crate/dev",
 	"programs/limbo"
 ]
