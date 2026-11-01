@@ -10,6 +10,7 @@
 				pkgs.python3
 
 				config.packages.limbo
+				config.packages.limbo_client
 				config.packages.spl_token_cli
 			];
 
