@@ -18,6 +18,6 @@ fn new() {
 	let buyer_pk_bytes: [_; _] = buyer_pk.to_bytes();
 	let buyer_addr: Address = buyer_pk_bytes.into();
 
-	svm.add_program_from_file(&program_addr, "../../target/deploy/limbo.so").expect("`.so`");
+	svm.add_program_from_file(program_addr, "../../target/deploy/limbo.so").expect("`.so`");
 	svm.airdrop(&buyer_addr, 10_000_000_000).expect("airdrop");
 }
