@@ -2933,6 +2933,7 @@ version = "0.1.0"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
+ "eyre",
  "litesvm",
  "solana-address 2.6.1",
  "solana-sdk",
