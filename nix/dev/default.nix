@@ -32,6 +32,7 @@
 				pkgs.pre-commit
 				pkgs.pkg-config
 				pkgs.mdwatch
+				pkgs.license-generator
 
 				config.packages.dev
 			];
