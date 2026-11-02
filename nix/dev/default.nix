@@ -31,6 +31,7 @@
 				pkgs.cocogitto
 				pkgs.pre-commit
 				pkgs.pkg-config
+				pkgs.mdwatch
 
 				config.packages.dev
 			];
