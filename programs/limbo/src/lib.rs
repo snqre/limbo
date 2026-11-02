@@ -118,7 +118,6 @@ struct Attest<'info> {
 	pub usdc: Account<'info, Mint>,
 
 	/// CHECK: used for destination transfer and seed derivation
-	#[account(mut)]
 	pub seller: UncheckedAccount<'info>,
 
 	#[account(mut)]
@@ -126,8 +125,8 @@ struct Attest<'info> {
 	#[account(associated_token::authority = seller)]
 	pub seller_token_account: Account<'info, TokenAccount>,
 
-	#[account(mut)]
-	pub buyer: Signer<'info>,
+	/// CHECK: used for PDE seed derivation
+	pub buyer: UncheckedAccount<'info>,
 
 	#[account(mut)]
 	pub attestator: Signer<'info>,
@@ -223,16 +222,20 @@ mod contract {
 
 	pub fn attest(context: Context<Attest>, seed: u64) -> Result {
 		// a signature or cryptographic proof can be checked onchain instead of a specific attestator being required (for this implementation requiring a single attestator should be enough)
+		//
+		// attest can automatically send funds to the seller and complete the lifecycle but perhaps its wiser to keep these as two separate instructions to leave room for a dispute or challenge window
 
 		let escrow: &mut Account<_> = &mut context.accounts.escrow;
 
 		require!(escrow.lifecycle == Lifecycle::Funded, Error::AlreadyComplete);
 
-		if let Some(required_attestator_addr) = escrow.attestator {
-			let attestator_addr = context.accounts.attestator.key();
+		let Some(required_attestator_addr) = escrow.attestator else {
+			todo!("no branch for zero attestator handling")
+		};
 
-			require!(attestator_addr == required_attestator_addr, Error::Unauthorized);
-		}
+		let attestator_addr = context.accounts.attestator.key();
+
+		require!(attestator_addr == required_attestator_addr, Error::Unauthorized);
 
 		escrow.lifecycle = Lifecycle::Delivered;
 
